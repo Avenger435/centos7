@@ -1,0 +1,37 @@
+---
+    - name: Does the Maven apt file exist?
+      command: test -d /usr/local/maven
+      register: maven_exists
+      ignore_errors: true
+
+    - name: Download maven
+      get_url:
+        url: http://www.nic.funet.fi/pub/mirrors/apache.org/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+        dest: /tmp/apache-maven-3.5.4-bin.tar.gz
+      when: maven_exists.rc == 1
+
+    - name: Unpack maven
+      shell: tar xvzf /tmp/apache-maven-3.5.4-bin.tar.gz -C /usr/local/
+      when: maven_exists.rc == 1
+
+    - name: Add maven link
+      shell: ln -s /usr/local/apache-maven-3.5.4 /usr/local/maven
+      when: maven_exists.rc == 1
+
+    - name: add maven to path
+      lineinfile: >
+        dest=/etc/environment
+        state=present
+        backrefs=yes
+        regexp='PATH=(["]*)((?!.*?/usr/local/maven/bin).*?)(["]*)$'
+        line="PATH=\1\2:/usr/local/maven/bin\3"
+      when: maven_exists.rc == 1
+
+    - name: Set Maven opts
+      lineinfile: dest=/etc/environment state=present regexp='^MAVEN_OPTS' line='MAVEN_OPTS="-Xms256m -Xmx1024m"'
+      when: maven_exists.rc == 1
+
+    - name: Remove maven installation package
+      file: path=/tmp/apache-maven-3.5.4-bin.tar.gz state=absent
+      when: maven_exists.rc == 1
+    

@@ -1,0 +1,282 @@
+version: '2'
+services:
+  sivi-config:
+    image: sstools.services.plat.fi:443/sivi-cloud-common/sivi-config-development
+    ports:
+     - 8888:8888
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - CONFIGURATION_BRANCH=master
+      - SPRING_LOG_LEVEL=INFO
+      - TOOLS_IP=185.134.88.11
+      - JAVA_OPTS=-Xms64m -Xmx64m -Xss512k -Dfile.encoding=UTF8
+  sivi-discovery:
+    image: sstools.services.plat.fi:443/sivi-cloud-common/sivi-discovery-development
+    ports:
+     - 8081:8081
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - JAVA_OPTS=-Xms64m -Xmx64m -Xss512k -Dfile.encoding=UTF8
+    depends_on:
+     - sivi-config
+    links:
+     - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-config:8888/health
+  sivi-gateway:
+    image: sstools.services.plat.fi:443/sivi-cloud-common/sivi-gateway-development
+    ports:
+      - 8088:8088
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - JAVA_OPTS=-Xms64m -Xmx64m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+#  sivi-admin:
+#    image: sstools.services.plat.fi:443/sivi-cloud-common/sivi-admin-development
+#    ports:
+#      - 8084:8084
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=cloudlocal
+#      - JAVA_OPTS=-Xms64m -Xmx64m -Xss512k
+#      - HOST_IP=10.0.2.15
+#    depends_on:
+#      - sivi-discovery
+#    links:
+#      - sivi-discovery
+#      - sivi-config
+#    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-testauth-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-testauth-core-development
+    ports:
+      - 8083:8083
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - HOST_IP=10.0.2.15
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  vaka-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/vaka-core-development
+    ports:
+      - 8082:8082
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+#  sivi-core:
+#    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-core-development
+#    ports:
+#      - 8086:8086
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=cloudlocal
+#      - DB_HOST=10.0.2.15
+#      - JAVA_OPTS=-Xms64m -Xmx64m -Xss512k
+#      - HOST_IP=10.0.2.15
+#    depends_on:
+#      - sivi-discovery
+#    links:
+#      - sivi-discovery
+#      - sivi-config
+#    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-codes-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-codes-development
+    ports:
+      - 8089:8089
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms64m -Xmx64m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-accounts-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-accounts-core-development
+    ports:
+      - 8087:8087
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss768k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-messaging-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-messaging-core-development
+    ports:
+      - 8097:8097
+    expose: 
+      - 8097
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-growing-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-growing-core-development
+    ports:
+      - 8085:8085
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-documents-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-documents-core-development
+    ports:
+      - 8092:8092
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    volumes:
+      - "/documents:/documents"
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-integrations:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-integrations-development
+    ports:
+      - 8093:8093
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    volumes:     
+      - /tmp:/tmp
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-ada-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-ada-core-development
+    ports:
+      - 8100:8100
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-sws-core:
+    image: sstools.services.plat.fi:443/sivi-cloud-core/sivi-sws-core-development
+    ports:
+      - 8090:8090
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - DB_HOST=10.0.2.15
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  vaka-ui:
+    image: sstools.services.plat.fi:443/sivi-cloud-ui/vaka-ui-development
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=cloudlocal
+      - JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+      - HOST_IP=10.0.2.15
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+    entrypoint: ./wait-for-service.sh http://sivi-discovery:8081/health
+  sivi-ui:
+    image: sstools.services.plat.fi:443/sivi-cloud-ui/sivi-ui-development
+    ports:
+      - 8094:8094
+    environment:
+      - DEST_ENV=local-docker
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+  sivi-admin-ui:
+    image: sstools.services.plat.fi:443/sivi-cloud-ui/sivi-admin-ui-development
+    ports:
+      - 8098:8098
+    environment:
+      - HOST_IP=10.0.2.15
+      - DEST_ENV=local-docker
+    depends_on:
+      - sivi-discovery
+    links:
+      - sivi-discovery
+      - sivi-config
+  kibana:  
+    image: kibana:6.5.1
+    links:
+      - elasticsearch
+    ports:
+      - 5601:5601
+  logstash: 
+    image: logstash:6.5.1
+    command: 'logstash -e "input { http { port => 5000 } } output { elasticsearch { hosts => elasticsearch } }"'
+    ports:
+      - 5000:5000
+    links:
+      - elasticsearch
+  elasticsearch:
+    image: elasticsearch:6.5.1
+    environment:
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m -Xss512k -Dfile.encoding=UTF8
+    volumes:     
+      - /home/vagrant/elk-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300

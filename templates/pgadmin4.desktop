@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=/home/vagrant/pgadmin4/lib/python3.6/site-packages/pgadmin4/pgadmin4.sh
+Icon=
+Type=Application
+Terminal=0
+Comment=pgadmin4
+Name=pgadmin4
+GenericName=pgadmin4
+StartupNotify=false
+Categories=Application;Development;

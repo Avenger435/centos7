@@ -1,0 +1,17 @@
+# KEYBOARD CONFIGURATION FILE
+
+# Consult the keyboard(5) manual page.
+#ORIG VALUES:
+#XKBMODEL="pc105"
+#XKBLAYOUT="us"
+#XKBVARIANT=""
+#XKBOPTIONS=""
+#BACKSPACE="guess"
+
+XKBMODEL="pc105"
+XKBLAYOUT="fi"
+XKBVARIANT=""
+XKBRULES="evdev"
+XKBOPTIONS="terminate:ctrl_alt_bksp"
+
+BACKSPACE="guess"

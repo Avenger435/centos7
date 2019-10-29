@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  strategy: debug
+  sudo: true
+  vars_files:
+    - vars/centos-vars.yml
+
+  roles:
+    - role: geerlingguy.postgresql
+      become: yes
+
+  tasks:
+    - name: yum make cache
+      yum: update_cache=yes
+   # - include: tasks/required-libs.yml
+    - include: tasks/eclipse-sts.yml
+    - include: tasks/oracle-jdk.yml
+    - include: tasks/maven.yml
+    - include: tasks/docker.yml
+    - include: tasks/chrome.yml
+    #- include: tasks/pgadmin4.yml
+    #- include: tasks/minikube.yml
+

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=/usr/local/share/giteye/GitEye
+Icon=/usr/local/share/giteye/icon.xpm
+Type=Application
+Terminal=0
+Comment=GitEye for developers
+Name=GitEye
+GenericName=GitEye
+StartupNotify=false
+Categories=Application;Development;

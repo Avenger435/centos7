@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tomee>
+  <!-- see http://tomee.apache.org/containers-and-resources.html -->
+
+  <!-- activate next line to be able to deploy applications in apps -->
+  <!-- <Deployments dir="apps" /> -->
+  <Resource id="Default JDBC Database" type="javax.sql.DataSource">
+	JdbcDriver com.mysql.jdbc.Driver
+	JdbcUrl jdbc:mysql://localhost:3306/helmi
+	UserName hoh
+	Password hoh
+	JtaManaged true
+  </Resource>
+  <Resource id="Default Unmanaged JDBC Database"
+	type="javax.sql.DataSource">
+	JdbcDriver com.mysql.jdbc.Driver
+	JdbcUrl jdbc:mysql://localhost:3306/helmi
+	UserName hoh
+	Password hoh
+	JtaManaged false
+  </Resource>
+  <Resource id="AuditLogDataSource" type="javax.sql.DataSource">
+	JdbcDriver com.mysql.jdbc.Driver
+	JdbcUrl jdbc:mysql://localhost:3306/helmi
+	username=hoh
+	password=hoh
+	JtaManaged true
+  </Resource>
+  
+  
+  <!--<Resource name="jdbc/JCGExampleDB" 
+			  global="jdbc/JCGExampleDB"
+			  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+			  auth="Container"
+              type="javax.sql.DataSource"              
+			  username="test"
+			  password="test"
+			  driverClassName="com.mysql.jdbc.Driver"
+			  description="JCG Example MySQL database."
+			  url="jdbc:mysql://localhost:3306/JCGExampleDB"
+			  maxTotal="10"
+			  maxIdle="10"
+			  maxWaitMillis="10000"
+			  removeAbandonedTimeout="300"			  
+			  defaultAutoCommit="true" />-->
+</tomee>

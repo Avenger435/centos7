@@ -1,0 +1,44 @@
+---
+__postgresql_version: "10"
+__postgresql_data_dir: "/var/lib/postgresql/{{ __postgresql_version }}/main"
+__postgresql_bin_path: "/usr/lib/postgresql/{{ __postgresql_version }}/bin"
+__postgresql_config_path: "/etc/postgresql/{{ __postgresql_version }}/main"
+__postgresql_daemon: postgresql
+__postgresql_packages:
+  - postgresql
+  - postgresql-contrib
+  - libpq-dev
+document_root: /vagrant
+apt_file: /etc/apt/sources.list.d/google-chrome.list
+databases: 
+  - { dbname: "vakadb", dbuser: "vaka", dbpassword: "akav" }
+  - { dbname: "sividb", dbuser: "sivi", dbpassword: "ivis" }
+  - { dbname: "authdb", dbuser: "authuser", dbpassword: "resuhtua" }
+  - { dbname: "accountsdb", dbuser: "accounts", dbpassword: "stnuocca" }
+  - { dbname: "growingdb", dbuser: "growing", dbpassword: "gniworg" }
+  - { dbname: "codesdb", dbuser: "codes", dbpassword: "sedoc" }
+  - { dbname: "ohkdb", dbuser: "ohk", dbpassword: "kho" }
+  - { dbname: "swsdb", dbuser: "sws", dbpassword: "sws" }
+  - { dbname: "documentdb", dbuser: "documentuser", dbpassword: "resutnemucod" }
+  - { dbname: "integrationdb", dbuser: "integration", dbpassword: "noitargetni" }
+  - { dbname: "messagingdb", dbuser: "messaging", dbpassword: "gnigassem" }
+  - { dbname: "adadb", dbuser: "ada", dbpassword: "ada" }
+mysqldatabases: 
+  - { dbname: "helmi", dbuser: "hoh", dbpassword: "hoh" }
+geos_version: geos-3.7.1
+geos_tarball_url: "http://download.osgeo.org/geos/{{ geos_version }}.tar.bz2"
+geos_install_dir: "/tmp/{{ geos_version }}"
+proj_version: "proj-5.2.0"
+proj_tarball_url: "https://download.osgeo.org/proj/{{ proj_version }}.tar.gz"
+proj_install_dir: "/tmp/{{ proj_version }}"
+proj_datumgrid_version: "proj-datumgrid-1.8"
+proj_datumgrid_tarball_url: "https://download.osgeo.org/proj/{{ proj_datumgrid_version }}.tar.gz"
+gdal_version_number: 2.4.0
+gdal_version: gdal-{{ gdal_version_number }}
+gdal_tarball_url: "https://download.osgeo.org/gdal/{{ gdal_version_number }}/{{ gdal_version }}.tar.gz"
+gdal_install_dir: "/tmp/{{ gdal_version }}"
+postgis_version_number: 2.5.2
+postgis_version: postgis-{{ postgis_version_number }}
+postgis_tarball_url: "http://postgis.net/stuff/{{ postgis_version }}.tar.gz"
+postgis_install_dir: "/tmp/{{ postgis_version }}"
+DEBIAN_FRONTEND: noninteractive

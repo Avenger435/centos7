@@ -1,0 +1,11 @@
+---
+    - name: Install jdk-11
+      shell: sudo yum install java-11-openjdk-devel
+
+
+    - name: Set JAVA_HOME
+      lineinfile:
+        dest: /etc/environment
+        state: present
+        regexp: '^JAVA_HOME'
+        line: 'JAVA_HOME==/usr/lib/jvm/java-11-openjdk/bin'   

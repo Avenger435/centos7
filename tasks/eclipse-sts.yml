@@ -1,0 +1,56 @@
+---
+    - name: Does the Spring Tool Suite tar exists?
+      command: test -d /tmp/spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-linux.gtk.x86_64.tar.gz
+      register: sts_exists
+      ignore_errors: true
+      
+    - name: Does the Spring Tool Suite folder exists?
+      stat: path=/home/vagrant/eclipse
+      register: eclipse_exists
+      ignore_errors: true
+
+    - name: Download sts
+      get_url:
+        url: https://download.springsource.com/release/STS4/4.3.1.RELEASE/dist/e4.12/spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-linux.gtk.x86_64.tar.gz
+        dest: /tmp/spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-linux.gtk.x86_64.tar.gz
+      when: sts_exists.rc == 1
+      
+    - name: Move old installation
+      shell: mv /home/vagrant/eclipse /home/vagrant/eclipse_old
+      when: eclipse_exists == 1
+
+    - name: Create eclipse directory
+      file: path=/home/vagrant/eclipse state=directory owner=vagrant group=vagrant mode=0775 recurse=yes
+
+    - name: Install sts
+      shell: tar xvzf /tmp/spring-tool-suite-4-4.3.1.RELEASE-e4.12.0-linux.gtk.x86_64.tar.gz -C /home/vagrant/eclipse/
+      when: sts_exists.rc == 1
+
+   
+    - name: copy formatter
+      template: src=templates/codeformatters.xml dest=/home/vagrant/eclipse/codeformatters.xml
+
+
+    - name: copy cleanup
+      template: src=templates/vaka-cleanup.xml dest=/home/vagrant/eclipse/vaka-cleanup.xml
+
+
+    - name: copy codetemplate
+      template: src=templates/codetemplates.xml dest=/home/vagrant/eclipse/codetemplates.xml
+
+    - name: Folder rights
+      file: path=/home/vagrant/eclipse state=directory owner=vagrant group=vagrant mode=0775 recurse=yes
+
+
+
+    #- name: Does the Yatta exists?
+    #  command: test -f /home/vagrant/yatta-eclipse-launcher-linux-64.jar
+    #  register: yatta_exists
+    #  ignore_errors: true
+
+    #- name: Download Yatta
+    #  get_url:
+    #    url: http://marketplace.yatta.de/update/profiles/yatta-eclipse-launcher-linux-64.jar
+    #    dest: /home/vagrant/yatta-eclipse-launcher-linux-64.jar
+    #  when: sts_exists.rc == 1
+      

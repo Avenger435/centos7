@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=/home/vagrant/eclipse/sts-4.3.1.RELEASE/STS
+Icon=/home/vagrant/eclipse/sts-4.3.1.RELEASE/icon.xpm
+Type=Application
+Terminal=0
+Comment=Eclipse Integrated Development Environment
+Name=STS Eclipse
+GenericName=sts-4.3.1
+StartupNotify=false
+Categories=Application;Development;IDE;Java;

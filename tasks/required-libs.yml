@@ -1,0 +1,7 @@
+---
+    - name: "Add aliaces"
+      lineinfile: dest=/etc/bash.bashrc state=present regexp="^ll=" line="alias ll='ls -l'"
+
+    - name: Ensure a locale exists
+      become: true
+      shell: yum -y install `check-language-support -l en`
